@@ -1,0 +1,30 @@
+@prefix dash:   <http://datashapes.org/dash#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh:     <http://www.w3.org/ns/shacl#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix ex:     <http://example.org/ns#> .
+@prefix shapes: <http://example.org/ns/shapes#> .
+
+shapes:DigitalShadowShape
+  a sh:NodeShape ;
+  sh:targetClass ex:DigitalShadow ;
+  sh:sparql [ a sh:SPARQLConstraint ;
+  sh:message "Model is an instance!." ;
+  sh:select """
+      PREFIX ex: <http://example.org/ns#>
+      PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+      SELECT $this
+      {
+        FILTER NOT EXISTS {
+          $this ex:bar ?model .
+          $this ex:bar ?dataTrace .
+
+          ?model a ex:Model .
+          ?dataTrace a ex:DataTrace .
+        }
+      }
+      """ ; ] ;
+.
